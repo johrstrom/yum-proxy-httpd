@@ -1,0 +1,14 @@
+<IfModule mod_cache.c>
+    <IfModule mod_cache_disk.c>
+        CacheRoot "{{ httpd_cache }}"
+        CacheEnable disk  "/"
+        CacheDirLevels 6
+        CacheDirLength 3
+        CacheMaxExpire 604800
+        CacheIgnoreCacheControl On
+        CacheStoreNoStore On
+    </IfModule>
+
+    # When acting as a proxy, don't cache the list of security updates
+    #CacheDisable "http://security.update.server/update-list/"
+</IfModule>

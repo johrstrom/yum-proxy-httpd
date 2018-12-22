@@ -1,0 +1,33 @@
+- hosts: localhost
+
+  tasks:
+  - name: defaults
+    set_fact:
+      httpd_conf: "/etc/httpd/conf.d"
+      httpd_mod_conf: "/etc/httpd/conf.modules.d"
+      httpd_cache: "/var/cache/httpd/proxy"
+      log_level: "debug"
+      fedora_mirror: "http://mirrors.kernel.org/fedora"
+
+  - name: template files
+    template:
+      src: "{{ item.name }}.j2"
+      dest: "{{ item.dir }}/{{ item.name }}"
+      mode: '0644'
+      owner: root
+      group: root
+    become: true
+    notify: restart httpd
+    loop:
+    - { name: "repo_proxy.conf", dir: "{{ httpd_conf }}" }
+    - { name: "cache.conf", dir: "{{ httpd_conf }}" }
+    - { name: "00-base.conf", dir: "{{ httpd_mod_conf }}" }
+    - { name: "httpd.conf", dir: "/etc/httpd/conf" }
+
+
+  handlers:
+  - name: restart httpd
+    systemd: 
+      name: httpd
+      state: restarted
+  become: true

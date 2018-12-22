@@ -1,0 +1,12 @@
+<Location "/pub/fedora/linux" >
+   Header always set Cache-Control: max-age=604800
+   ProxyPass "{{ fedora_mirror }}
+   ProxyPassReverse "{{ fedora_mirror }}"
+</Location>
+
+<Location "/pub/epel" >
+   Header always set Cache-Control: max-age=604800
+   ProxyPass "{{ fedora_mirror }}"
+   ProxyPassReverse "{{ fedora_mirror }}"
+</Location>
+
